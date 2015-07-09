@@ -128,6 +128,9 @@ void s_init(void)
  */
 u32 spl_boot_device(void)
 {
+#ifdef CONFIG_SPL_ON_NAND
+	return BOOT_DEVICE_NAND;
+#else
 	/*
 	 * When booting from the SD card, the "eGON.BT0" signature is expected
 	 * to be found in memory at the address 0x0004 (see the "mksunxiboot"
@@ -148,6 +151,7 @@ u32 spl_boot_device(void)
 		return BOOT_DEVICE_MMC1;
 	else
 		return BOOT_DEVICE_BOARD;
+#endif
 }
 
 /* No confirmation data available in SPL yet. Hardcode bootmode */
