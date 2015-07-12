@@ -148,6 +148,8 @@
 #define CONFIG_SYS_NAND_U_BOOT_OFFS 0x008000
 #define CONFIG_SYS_NAND_PAGE_SIZE 0x002000 /* 8kb*/
 #define CONFIG_SUNXI_ECC_STRENGTH 40
+
+#define CONFIG_CMD_A20_NANDREAD
 #endif
 
 /* mmc config */
