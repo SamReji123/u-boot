@@ -85,6 +85,13 @@ config SPL_NAND_DENALI
 	  This is a small implementation of the Denali NAND controller
 	  for use on SPL.
 
+config SPL_NAND_SUNXI
+	bool "Support for NAND on Allwinner A20 in SPL"
+	depends on MACH_SUN7I
+	---help---
+	Enable support for internal NAND. This option allows SPL to read from
+	sunxi NAND using DMA transfers. Writing is not supported.
+
 endif
 
 endmenu
