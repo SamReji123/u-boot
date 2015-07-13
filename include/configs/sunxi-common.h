@@ -139,6 +139,80 @@
 #define CONFIG_INITRD_TAG
 #define CONFIG_SERIAL_TAG
 
+#if defined(CONFIG_SPL_NAND_SUNXI)
+#define CONFIG_SPL_NAND_DRIVERS
+#define CONFIG_SPL_NAND_SUPPORT
+
+#define CONFIG_SYS_NAND_SPL_KERNEL_OFFS 0x280000
+#define CONFIG_SYS_NAND_U_BOOT_OFFS 0x008000
+
+#define CONFIG_SYS_NAND_ECC_PAGE_SIZE 0x000400 /* 1kb */
+#define CONFIG_SYS_NAND_PAGE_SIZE 0x002000 /* 8kb*/
+#endif
+
+#define PORTC_BASE                 0x01c20800
+#define CCU_BASE                   0x01c20000
+#define NANDFLASHC_BASE            0x01c03000
+#define DMAC_BASE                  0x01c02000
+
+#define SYNDROME_PARTITIONS_END    0x00400000
+#define SUNXI_ECC_STRENGTH         40
+
+#define CCU_AHB_GATING_REG0        0x60
+#define CCU_NAND_SCLK_CFG_REG      0x80
+#define CCU_AHB_GATING_REG0_NAND   (1 << 13)
+
+#define CCU_NAND_SCLK_CFG_REG_SCLK_GATING (1 << 31)
+#define CCU_NAND_SCLK_CFG_REG_CLK_DIV_RATIO (1 << 0)
+
+#define PORTC_PC_CFG0              0x48
+#define PORTC_PC_CFG1              0x4C
+#define PORTC_PC_CFG2              0x50
+#define PORTC_PC_CFG3              0x54
+
+#define PORTC_PC_CFG0_NRB1         (2 << 28)
+#define PORTC_PC_CFG0_NRB0         (2 << 24)
+#define PORTC_PC_CFG0_NRE          (2 << 20)
+#define PORTC_PC_CFG0_NCE0         (2 << 16)
+#define PORTC_PC_CFG0_NCE1         (2 << 12)
+#define PORTC_PC_CFG0_NCLE         (2 << 8)
+#define PORTC_PC_CFG0_NALE         (2 << 4)
+#define PORTC_PC_CFG0_NWE          (2 << 0)
+
+#define PORTC_PC_CFG1_NDQ7         (2 << 28)
+#define PORTC_PC_CFG1_NDQ6         (2 << 24)
+#define PORTC_PC_CFG1_NDQ5         (2 << 20)
+#define PORTC_PC_CFG1_NDQ4         (2 << 16)
+#define PORTC_PC_CFG1_NDQ3         (2 << 12)
+#define PORTC_PC_CFG1_NDQ2         (2 << 8)
+#define PORTC_PC_CFG1_NDQ1         (2 << 4)
+#define PORTC_PC_CFG1_NDQ0         (2 << 0)
+
+#define PORTC_PC_CFG2_NCE7         (2 << 24)
+#define PORTC_PC_CFG2_NCE6         (2 << 20)
+#define PORTC_PC_CFG2_NCE5         (2 << 16)
+#define PORTC_PC_CFG2_NCE4         (2 << 12)
+#define PORTC_PC_CFG2_NCE3         (2 << 8)
+#define PORTC_PC_CFG2_NCE2         (2 << 4)
+#define PORTC_PC_CFG2_NWP          (2 << 0)
+
+#define PORTC_PC_CFG3_NDQS         (2 << 0)
+
+#define DMAC_CFG_REG0              0x300
+#define DMAC_SRC_START_ADDR_REG0   0x304
+#define DMAC_DEST_START_ADDRR_REG0 0x308
+#define DMAC_DDMA_BC_REG0          0x30C
+#define DMAC_DDMA_PARA_REG0        0x318
+
+#define DMAC_DDMA_CFG_REG_LOADING  (1 << 31)
+#define DMAC_DDMA_CFG_REG_DMA_DEST_DATA_WIDTH_32 (2 << 25)
+#define DMAC_DDMA_CFG_REG_DMA_SRC_DATA_WIDTH_32 (2 << 9)
+#define DMAC_DDMA_CFG_REG_DMA_SRC_ADDR_MODE_IO (1 << 5)
+#define DMAC_DDMA_CFG_REG_DDMA_SRC_DRQ_TYPE_NFC (3 << 0)
+
+#define DMAC_DDMA_PARA_REG_SRC_WAIT_CYC (0x0F << 0)
+#define DMAC_DDMA_PARA_REG_SRC_BLK_SIZE (0x7F << 8)
+
 /* mmc config */
 #if !defined(CONFIG_UART0_PORT_F)
 #define CONFIG_MMC
