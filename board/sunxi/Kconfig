@@ -227,6 +227,22 @@ config OLD_SUNXI_KERNEL_COMPAT
 	Set this to enable various workarounds for old kernels, this results in
 	sub-optimal settings for newer kernels, only enable if needed.
 
+config SUNXI_NAND
+    bool "Support for NAND on Allwinner A20"
+    depends on MACH_SUN7I
+    ---help---
+    Enable support for internal NAND. Adds a command a20_nandread that allows
+    reading. Writing is not supported.
+
+config SPL_NAND_SUNXI
+    bool "Support for NAND in SPL on Allwinner A20"
+    default y if SUNXI_NAND
+    select SPL_NAND_SUPPORT
+    depends on SUNXI_NAND && SPL
+    ---help---
+    Enable support for internal NAND in SPL. When enabled, SPL will try to load
+    full U-Boot from NAND. Writing is not supported.
+
 config MMC0_CD_PIN
 	string "Card detect pin for mmc0"
 	default ""
