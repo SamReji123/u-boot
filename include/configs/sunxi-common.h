@@ -150,8 +150,6 @@
 #define CONFIG_SYS_NAND_PAGE_SIZE 0x002000 /* 8kb*/
 #endif
 
-#define DMAC_BASE                  0x01c02000
-
 #define SYNDROME_PARTITIONS_END    0x00400000
 #define SUNXI_ECC_STRENGTH         40
 

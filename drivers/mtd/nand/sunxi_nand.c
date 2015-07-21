@@ -190,23 +190,23 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 	}
 
 	/* DMAC */
-	writel(0x0, DMAC_BASE + DMAC_CFG_REG0); /* clr dma cmd */
+	writel(0x0, SUNXI_DMA_BASE + DMAC_CFG_REG0); /* clr dma cmd */
 	/* read from REG_IO_DATA */
 	writel(SUNXI_NFC_BASE + NFC_IO_DATA,
-	       DMAC_BASE + DMAC_SRC_START_ADDR_REG0);
+	       SUNXI_DMA_BASE + DMAC_SRC_START_ADDR_REG0);
 	writel((uint32_t)temp_buf,
-	       DMAC_BASE + DMAC_DEST_START_ADDRR_REG0); /* read to RAM */
+	       SUNXI_DMA_BASE + DMAC_DEST_START_ADDRR_REG0); /* read to RAM */
 	writel(DMAC_DDMA_PARA_REG_SRC_WAIT_CYC
 			| DMAC_DDMA_PARA_REG_SRC_BLK_SIZE,
-			DMAC_BASE + DMAC_DDMA_PARA_REG0);
+			SUNXI_DMA_BASE + DMAC_DDMA_PARA_REG0);
 	writel(CONFIG_SYS_NAND_ECC_PAGE_SIZE,
-	       DMAC_BASE + DMAC_DDMA_BC_REG0); /* 1kB */
+	       SUNXI_DMA_BASE + DMAC_DDMA_BC_REG0); /* 1kB */
 	writel(DMAC_DDMA_CFG_REG_LOADING
 		| DMAC_DDMA_CFG_REG_DMA_DEST_DATA_WIDTH_32
 		| DMAC_DDMA_CFG_REG_DMA_SRC_DATA_WIDTH_32
 		| DMAC_DDMA_CFG_REG_DMA_SRC_ADDR_MODE_IO
 		| DMAC_DDMA_CFG_REG_DDMA_SRC_DRQ_TYPE_NFC,
-		DMAC_BASE + DMAC_CFG_REG0);
+		SUNXI_DMA_BASE + DMAC_CFG_REG0);
 
 	writel((NFC_CMD_RNDOUTSTART << NFC_RANDOM_READ_CMD1_OFFSET)
 		| (NFC_CMD_RNDOUT << NFC_RANDOM_READ_CMD0_OFFSET)
@@ -227,7 +227,7 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 		return;
 	}
 
-	if (!check_value_negated(DMAC_BASE + DMAC_CFG_REG0,
+	if (!check_value_negated(SUNXI_DMA_BASE + DMAC_CFG_REG0,
 				 DMAC_DDMA_CFG_REG_LOADING, MAX_RETRIES)) {
 		printf("Error while waiting for dma transfer to finish\n");
 		return;
