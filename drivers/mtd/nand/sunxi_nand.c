@@ -75,12 +75,12 @@ void nand_init(void)
 {
 	uint32_t val;
 
-	val = readl(NANDFLASHC_BASE + NFC_CTL);
+	val = readl(SUNXI_NFC_BASE + NFC_CTL);
 	/* enable and reset CTL */
 	writel(val | NFC_CTL_EN | NFC_CTL_RESET,
-	       NANDFLASHC_BASE + NFC_CTL);
+	       SUNXI_NFC_BASE + NFC_CTL);
 
-	if (!check_value_negated(NANDFLASHC_BASE + NFC_CTL,
+	if (!check_value_negated(SUNXI_NFC_BASE + NFC_CTL,
 				 NFC_CTL_RESET, MAX_RETRIES)) {
 		printf("Couldn't initialize nand\n");
 	}
@@ -149,9 +149,9 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 
 	/* set CMD  */
 	writel(NFC_SEND_CMD1 | NFC_WAIT_FLAG | NAND_CMD_RESET,
-	       NANDFLASHC_BASE + NFC_CMD);
+	       SUNXI_NFC_BASE + NFC_CMD);
 
-	if (!check_value(NANDFLASHC_BASE + NFC_ST, NFC_CMD_INT_FLAG,
+	if (!check_value(SUNXI_NFC_BASE + NFC_ST, NFC_CMD_INT_FLAG,
 			 MAX_RETRIES)) {
 		printf("Error while initilizing command interrupt\n");
 		return;
@@ -165,7 +165,7 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 	}
 
 	/* clear ecc status */
-	writel(0, NANDFLASHC_BASE + NFC_ECC_ST);
+	writel(0, SUNXI_NFC_BASE + NFC_ECC_ST);
 
 	/* Choose correct seed */
 	if (syndrome)
@@ -175,24 +175,24 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 
 	writel((rand_seed << 16) | NFC_ECC_RANDOM_EN | NFC_ECC_EN
 		| NFC_ECC_PIPELINE | (ecc_mode << 12),
-		NANDFLASHC_BASE + NFC_ECC_CTL);
+		SUNXI_NFC_BASE + NFC_ECC_CTL);
 
-	val = readl(NANDFLASHC_BASE + NFC_CTL);
-	writel(val | NFC_CTL_RAM_METHOD, NANDFLASHC_BASE + NFC_CTL);
+	val = readl(SUNXI_NFC_BASE + NFC_CTL);
+	writel(val | NFC_CTL_RAM_METHOD, SUNXI_NFC_BASE + NFC_CTL);
 
 	if (syndrome) {
 		writel(CONFIG_SYS_NAND_ECC_PAGE_SIZE,
-		       NANDFLASHC_BASE + NFC_SPARE_AREA);
+		       SUNXI_NFC_BASE + NFC_SPARE_AREA);
 	} else {
 		oob_offset = CONFIG_SYS_NAND_PAGE_SIZE
 			+ (column / CONFIG_SYS_NAND_ECC_PAGE_SIZE) * ecc_off;
-		writel(oob_offset, NANDFLASHC_BASE + NFC_SPARE_AREA);
+		writel(oob_offset, SUNXI_NFC_BASE + NFC_SPARE_AREA);
 	}
 
 	/* DMAC */
 	writel(0x0, DMAC_BASE + DMAC_CFG_REG0); /* clr dma cmd */
 	/* read from REG_IO_DATA */
-	writel(NANDFLASHC_BASE + NFC_IO_DATA,
+	writel(SUNXI_NFC_BASE + NFC_IO_DATA,
 	       DMAC_BASE + DMAC_SRC_START_ADDR_REG0);
 	writel((uint32_t)temp_buf,
 	       DMAC_BASE + DMAC_DEST_START_ADDRR_REG0); /* read to RAM */
@@ -210,18 +210,18 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 
 	writel((NFC_CMD_RNDOUTSTART << NFC_RANDOM_READ_CMD1_OFFSET)
 		| (NFC_CMD_RNDOUT << NFC_RANDOM_READ_CMD0_OFFSET)
-		| (NFC_CMD_READSTART | NFC_READ_CMD_OFFSET), NANDFLASHC_BASE
+		| (NFC_CMD_READSTART | NFC_READ_CMD_OFFSET), SUNXI_NFC_BASE
 			+ NFC_RCMD_SET);
-	writel(1, NANDFLASHC_BASE + NFC_SECTOR_NUM);
+	writel(1, SUNXI_NFC_BASE + NFC_SECTOR_NUM);
 	writel(((page & 0xFFFF) << 16) | column,
-	       NANDFLASHC_BASE + NFC_ADDR_LOW);
-	writel((page >> 16) & 0xFF, NANDFLASHC_BASE + NFC_ADDR_HIGH);
+	       SUNXI_NFC_BASE + NFC_ADDR_LOW);
+	writel((page >> 16) & 0xFF, SUNXI_NFC_BASE + NFC_ADDR_HIGH);
 	writel(NFC_SEND_CMD1 | NFC_SEND_CMD2 | NFC_DATA_TRANS |
 		NFC_PAGE_CMD | NFC_WAIT_FLAG | (4 << NFC_ADDR_NUM_OFFSET) |
 		NFC_SEND_ADR | NFC_DATA_SWAP_METHOD | (syndrome ? NFC_SEQ : 0),
-		NANDFLASHC_BASE + NFC_CMD);
+		SUNXI_NFC_BASE + NFC_CMD);
 
-	if (!check_value(NANDFLASHC_BASE + NFC_ST, (1 << 2),
+	if (!check_value(SUNXI_NFC_BASE + NFC_ST, (1 << 2),
 			 MAX_RETRIES)) {
 		printf("Error while initializing dma interrupt\n");
 		return;
@@ -233,7 +233,7 @@ static void nand_read_page(unsigned int real_addr, int syndrome, uint32_t *ecc_e
 		return;
 	}
 
-	if (readl(NANDFLASHC_BASE + NFC_ECC_ST))
+	if (readl(SUNXI_NFC_BASE + NFC_ECC_ST))
 		(*ecc_errors)++;
 }
 
