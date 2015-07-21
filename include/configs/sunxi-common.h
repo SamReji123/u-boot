@@ -150,53 +150,11 @@
 #define CONFIG_SYS_NAND_PAGE_SIZE 0x002000 /* 8kb*/
 #endif
 
-#define PORTC_BASE                 0x01c20800
-#define CCU_BASE                   0x01c20000
 #define NANDFLASHC_BASE            0x01c03000
 #define DMAC_BASE                  0x01c02000
 
 #define SYNDROME_PARTITIONS_END    0x00400000
 #define SUNXI_ECC_STRENGTH         40
-
-#define CCU_AHB_GATING_REG0        0x60
-#define CCU_NAND_SCLK_CFG_REG      0x80
-#define CCU_AHB_GATING_REG0_NAND   (1 << 13)
-
-#define CCU_NAND_SCLK_CFG_REG_SCLK_GATING (1 << 31)
-#define CCU_NAND_SCLK_CFG_REG_CLK_DIV_RATIO (1 << 0)
-
-#define PORTC_PC_CFG0              0x48
-#define PORTC_PC_CFG1              0x4C
-#define PORTC_PC_CFG2              0x50
-#define PORTC_PC_CFG3              0x54
-
-#define PORTC_PC_CFG0_NRB1         (2 << 28)
-#define PORTC_PC_CFG0_NRB0         (2 << 24)
-#define PORTC_PC_CFG0_NRE          (2 << 20)
-#define PORTC_PC_CFG0_NCE0         (2 << 16)
-#define PORTC_PC_CFG0_NCE1         (2 << 12)
-#define PORTC_PC_CFG0_NCLE         (2 << 8)
-#define PORTC_PC_CFG0_NALE         (2 << 4)
-#define PORTC_PC_CFG0_NWE          (2 << 0)
-
-#define PORTC_PC_CFG1_NDQ7         (2 << 28)
-#define PORTC_PC_CFG1_NDQ6         (2 << 24)
-#define PORTC_PC_CFG1_NDQ5         (2 << 20)
-#define PORTC_PC_CFG1_NDQ4         (2 << 16)
-#define PORTC_PC_CFG1_NDQ3         (2 << 12)
-#define PORTC_PC_CFG1_NDQ2         (2 << 8)
-#define PORTC_PC_CFG1_NDQ1         (2 << 4)
-#define PORTC_PC_CFG1_NDQ0         (2 << 0)
-
-#define PORTC_PC_CFG2_NCE7         (2 << 24)
-#define PORTC_PC_CFG2_NCE6         (2 << 20)
-#define PORTC_PC_CFG2_NCE5         (2 << 16)
-#define PORTC_PC_CFG2_NCE4         (2 << 12)
-#define PORTC_PC_CFG2_NCE3         (2 << 8)
-#define PORTC_PC_CFG2_NCE2         (2 << 4)
-#define PORTC_PC_CFG2_NWP          (2 << 0)
-
-#define PORTC_PC_CFG3_NDQS         (2 << 0)
 
 #define DMAC_CFG_REG0              0x300
 #define DMAC_SRC_START_ADDR_REG0   0x304

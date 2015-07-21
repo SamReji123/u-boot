@@ -71,52 +71,10 @@ static inline int check_value_negated(int offset, int unexpected_bits,
 					max_number_of_retries, 1);
 }
 
-static void nand_set_clocks_and_pinmux(void)
-{
-	uint32_t val;
-
-	writel(PORTC_PC_CFG0_NRB1 |
-		PORTC_PC_CFG0_NRB0 |
-		PORTC_PC_CFG0_NRE  |
-		PORTC_PC_CFG0_NCE0 |
-		PORTC_PC_CFG0_NCE1 |
-		PORTC_PC_CFG0_NCLE |
-		PORTC_PC_CFG0_NALE |
-		PORTC_PC_CFG0_NWE, PORTC_BASE + PORTC_PC_CFG0);
-
-	writel(PORTC_PC_CFG1_NDQ7 |
-		PORTC_PC_CFG1_NDQ6 |
-		PORTC_PC_CFG1_NDQ5 |
-		PORTC_PC_CFG1_NDQ4 |
-		PORTC_PC_CFG1_NDQ3 |
-		PORTC_PC_CFG1_NDQ2 |
-		PORTC_PC_CFG1_NDQ1 |
-		PORTC_PC_CFG1_NDQ0, PORTC_BASE + PORTC_PC_CFG1);
-
-	writel(PORTC_PC_CFG2_NCE7 |
-		PORTC_PC_CFG2_NCE6 |
-		PORTC_PC_CFG2_NCE5 |
-		PORTC_PC_CFG2_NCE4 |
-		PORTC_PC_CFG2_NCE3 |
-		PORTC_PC_CFG2_NCE2 |
-		PORTC_PC_CFG2_NWP, PORTC_BASE + PORTC_PC_CFG2);
-
-	writel(PORTC_PC_CFG3_NDQS, PORTC_BASE + PORTC_PC_CFG3);
-
-	val = readl(CCU_BASE + CCU_AHB_GATING_REG0);
-	writel(CCU_AHB_GATING_REG0_NAND | val, CCU_BASE + CCU_AHB_GATING_REG0);
-
-	val = readl(CCU_BASE + CCU_NAND_SCLK_CFG_REG);
-	writel(val | CCU_NAND_SCLK_CFG_REG_SCLK_GATING
-		| CCU_NAND_SCLK_CFG_REG_CLK_DIV_RATIO,
-		CCU_BASE + CCU_NAND_SCLK_CFG_REG);
-}
-
 void nand_init(void)
 {
 	uint32_t val;
 
-	nand_set_clocks_and_pinmux();
 	val = readl(NANDFLASHC_BASE + NFC_CTL);
 	/* enable and reset CTL */
 	writel(val | NFC_CTL_EN | NFC_CTL_RESET,
